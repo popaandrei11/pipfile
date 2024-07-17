@@ -4,10 +4,19 @@ stages:
     - job: detect
       steps:
       - task: CmdLine@2
-        displayName: 'Install pipenv and generate Pipfile.lock'
+        displayName: 'Install pipenv and configure Pipfile'
         inputs:
           script: |
             python -m pip install pipenv
+            # Create or update the Pipfile with the necessary fields
+            if [ ! -f Pipfile ]; then
+              pipenv --python 3.10
+            fi
+            # Add verify_ssl field if missing
+            if ! grep -q 'verify_ssl' Pipfile; then
+              echo -e "[source]\nname = \"pypi\"\nurl = \"https://pypi.org/simple\"\nverify_ssl = true\n" >> Pipfile
+            fi
+            # Generate Pipfile.lock
             PIPENV_IGNORE_VIRTUALENVS=1 pipenv lock
 
       - task: CmdLine@2
