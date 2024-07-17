@@ -29,6 +29,8 @@ stages:
           displayName: 'Commit and push Pipfile.lock'
           inputs:
             script: |
+              git config --global user.email "you@example.com"
+              git config --global user.name "Your Name"
               git add Pipfile.lock
               git commit -m "Add generated Pipfile.lock"
               git push
