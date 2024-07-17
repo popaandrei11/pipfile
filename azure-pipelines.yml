@@ -1,0 +1,33 @@
+stages:
+- stage: 'BlackDuck_Scan'
+  jobs:
+    - job: detect
+      steps:
+      - task: CmdLine@2
+        displayName: 'Install pipenv and generate Pipfile.lock'
+        inputs:
+          script: |
+            python -m pip install pipenv
+            PIPENV_IGNORE_VIRTUALENVS=1 pipenv lock
+
+      - task: CmdLine@2
+        displayName: 'Commit and push Pipfile.lock'
+        inputs:
+          script: |
+            git add Pipfile.lock
+            git commit -m "Add generated Pipfile.lock"
+            git push
+
+      - task: SynopsysDetectTask@9
+        displayName: 'Run Synopsys Detect'
+        inputs:
+          BlackDuckService: 'BlackDuck'
+          DetectArguments: |
+            --detect.project.name=Continuum_Control_Plane
+            --detect.project.version.name=Ongoing_Build_Yaml_env 
+            --blackduck.trust.cert=true  
+            --detect.detector.search.depth=100  
+            --detect.tools=DETECTOR  
+            --detect.detector.search.continue=true
+            --detect.code.location.name=python-dependencies-Continuum_Control_Plane_3.0_env
+          DetectVersion: 'latest'
