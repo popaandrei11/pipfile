@@ -1,0 +1,78 @@
+[project]
+name = "com-splunk"
+version = "2.1.0"
+
+[build-system]
+requires = ["hatchling==1.18.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.envs.default.scripts]
+# Universal scripts
+setup = """
+  # Setup python environment and compile Pipfile.lock
+  pipenv install --categories 'packages,dev-packages,aws,azure'
+"""
+scan = """
+  # Check for vulnerabilities
+  set -ex
+  pipenv requirements
+  pip freeze
+  pip list --outdated
+  pip-audit --ignore-vuln GHSA-hrfv-mqp8-q5rw --ignore-vuln PYSEC-2022-43059
+"""
+test = """
+  # Run pytest
+  # TODO write unit tests
+  # pytest -v --cov --cov-report html --cov-fail-under 75
+"""
+lint = """
+  # Run linting
+  flake8 . --count --statistics
+"""
+# Azure scripts
+build = """
+  # Build function app zip
+  set -ex
+  # TODO remove aws once lib plugins are refactored
+  pipenv install --categories 'packages,aws,azure'
+  pip freeze | grep -v '-e git+'
+  pip freeze | grep -v '-e git+' > requirements.tmp
+  pip install -r ./requirements.tmp --target "functions/.python_packages/lib/site-packages"
+  ls -lah functions/.python_packages/lib/site-packages
+"""
+preinfra = """
+  # Add scripts here that need to run before infra is (re)deployed
+"""
+infra = """
+  # Redeploy infrastructure
+"""
+postinfra = """
+  # Run postinfra scripts
+"""
+predeploy = """
+  # Run predeploy scripts
+"""
+postdeploy = """
+  # Run postdeploy scripts
+"""
+healthcheck = """
+  # Healthcheck the live function
+  set -ex
+  # TODO write healthcheck
+  #curl --request GET https://api.eu.dev.azure.ccp.accenture.com/com/splunk/healthcheck
+"""
+fallback = """
+  # Switch function slots in the event of healthcheck failure
+"""
+promote = """
+  # Promote function slot
+"""
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore:.*removed in Flask 2.3.*",
+    "ignore:.*Draft4Validator.*",
+    "ignore:.*jsonschema.*",
+    "ignore:.*iter_errors.*",
+    "ignore:.*task.logissue.*",
+    "ignore:.*snowflake/connector.*"
+]

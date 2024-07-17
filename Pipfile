@@ -1,0 +1,55 @@
+[[source]]
+url = "${PIP_EXTRA_INDEX_URL}"
+name = "azdo"
+
+[requires]
+python_version = "3.10"
+
+[packages]
+abnosql = "0.0.23"
+connexion = "~=2.14.2"
+core-api = "0.1.4"
+core-etl = "0.0.12"
+elasticsearch = ">8.0.0"
+flask = "~=2.2.5"
+flask-cors = "~=4.0.1"
+flask_talisman = "~=1.0.0"
+grandalf = "~=0.8"
+jmespath = "~=1.0.1"
+jsonschema = "*"
+matplotlib = "~=3.8.3"
+pillow = "~=10.2.0"
+pluggy = "~=1.4.0"
+python-jose = "~=3.3.0"
+pyyaml = "~=6.0.1"
+requests = ">=2.31.0"
+responses = ">=0.23.3"
+shortid = "*"
+sqlglot = "*"
+werkzeug = "~=2.2.4"
+websocket-client = "1.6.2"
+xmltodict = "~=0.13.0"
+
+[dev-packages]
+flake8 = "*"
+pip-audit = "*"
+pytest = "*"
+pytest-azurepipelines = "*"
+pytest-cov = "*"
+
+[aws]
+aws-encryption-sdk = "3.1.1"
+aws-wsgi = "0.2.7"
+boto3 = "1.28.45"
+botocore = "1.31.45"
+dynamodb-json = "1.3"
+
+[azure]
+azure-common = "1.1.28"
+azure-core = "1.29.4"
+azure-cosmos = "4.5.0"
+azure-functions = "1.17.0"
+azure-identity = "1.14.0"
+azure-servicebus = "7.11.2"
+azure-keyvault-keys = "4.8.0"
+azure-keyvault-secrets = "4.7.0"

@@ -1,0 +1,6 @@
+jmespath
+pendulum
+requests
+rich
+pillow
+matplotlib
