@@ -17,7 +17,8 @@ stages:
             addToPath: true
 
         - script: |
-            python -m pip install --upgrade pip
+            python -m pip uninstall -y pip setuptools
+            python -m pip install --upgrade pip==24.1.2 setuptools==70.1.0
             pip install pipenv
             pipenv install --dev
             pipenv lock
